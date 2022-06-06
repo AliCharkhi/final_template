@@ -49,46 +49,29 @@
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
         {% endif %}
         <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <form>              
-                
-                
-                        {% for question in lesson.qusetion_set.all %}
-                        <div class="card mt-1">
-                            <div class="card-header"><h5>{{ question.question_text}}hello</h5></div>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {% for choice in question.choice_set.values %}
-                                    {% if choice in submission.choice.values %}
-                                        {% if choice.is_correct %}
-                                            <div class="form-check">
-                                                    <ol style="color:green"> Correct Answer: {{ choice.choice_text }}</ol>
-                                            </div>
-                                        {% else %}
-                                            <div class="form-check">
-                                                <ol>  {{ choice.choice_text }}</ol>
-                                            </div>
-                                        {% endif %}
-
-                                    {%else%}
-                                        {% if choice.is_correct %}
-                                            <div class="form-check">
-                                                    <ol style="color:orange"> Not selected: {{ choice.choice_text }}</ol>
-                                            </div>
-                                        {% else  %}
-                                            <div class="form-check">
-                                                <ol>  {{ choice.choice_text }}</ol>
-                                            </div>
-                                        {% endif %}
-                                        
-                                    {%endif%}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    
+            <h5 class="">Exam results</h5>
+            {% for question in course.question_set.all %}
+            <div class="card mt-1">
+                <div class="card-header"><h5>{{ question.question_text }}</h5></div>
+                <div class="form-group">
+                    {% for chc in question.choice_set.all %}
+                    <div class="form-check">
+                        {% if chc.is_correct and chc in choice %}
+                        <div class="text-success">Correct answer: {{ chc.choice_text }}</div>
+                        {% else %}{% if chc.is_correct and not chc in choice %}
+                        <div class="text-warning">Not selected: {{ chc.choice_text }}</div>
+                        {% else %}{% if not chc.is_correct and chc in choice %}
+                        <div class="text-danger">Wrong answer: {{ chc.choice_text }}</div>
+                        {% else %}
+                        <div>{{ chc.choice_text }}</div>
+                        {% endif %}{% endif %}{% endif %}
+                    </div>
                     {% endfor %}
-            </form> 
+                </div>
+            </div>
+            {% endfor %}
         </div>
+    </div>
     </div>
 </body>
 </html>
