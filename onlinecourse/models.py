@@ -104,7 +104,7 @@ class Enrollment(models.Model):
 class Question(models.Model):
     
     # Foreign key to lesson
-    lesson_id = models.ManyToManyField(Course)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
     # question text
     question_text = models.CharField(max_length=1000)
     # question grade/mark
@@ -129,9 +129,9 @@ class Question(models.Model):
     # Indicate if this choice of the question is a correct one or not
     # Other fields and methods you would like to design
 class Choice(models.Model):
-    question_id = models.ManyToManyField(Question)
+    question = models.ForeignKey(Question, on_delete= models.CASCADE)
     choice_text = models.CharField(max_length=1000)
-    is_correct = models.BooleanField()
+    is_correct = models.BooleanField(default = False)
 
 
 
